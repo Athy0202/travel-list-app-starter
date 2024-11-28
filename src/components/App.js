@@ -1,50 +1,39 @@
+import React, { useState } from 'react';
+import Form from './Form';
+import PackingList from './PackingList';
+import Stats from './Stats';
 // Initial packing items
 const initialItems = [
-  { id: 1, description: "Shirt", quantity: 5, packed: false },
+  { id: 1, description: "Shirt", quantity: 5, packed: true },
   { id: 2, description: "Pants", quantity: 2, packed: false },
 ];
-
+ 
 function Logo() {
   return <h1>My Travel List</h1>;
 }
-
-function Form() {
-  return (
-    <form className="add-form">
-      <h3>What do you need to pack?</h3>
-    </form>
-  );
-}
-
-function PackingList() {
-  return (
-    <div className="list">
-      <ul>
-        {initialItems.map((item) => (
-          <li>{item.description}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function Stats() {
-  return (
-    <footer className="stats">
-      <em>You have X items in the list. You already packed Y (Z%).</em>
-    </footer>
-  );
-}
-
+ 
+ 
+ 
 function App() {
+  const [items, setItems] = useState(initialItems);
+  function handleAddItem(newItem) {
+    setItems(prevItems => [...prevItems, newItem]);
+  }
+  function handleDeleteItem(id) {
+    setItems(prevItems => prevItems.filter(item => item.id !== id));
+  }
+ 
+  function handleUpdateItem(id) {
+    setItems(prevItems => prevItems.map(item => item.id === id ? {...item, packed: !item.packed} : item));
+  }
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackingList />
-      <Stats />
+      <Form handleAddItem={handleAddItem} /> {/* Passing handleAddItem to Form */}
+      <PackingList handleUpdateItem={handleUpdateItem} items={items} handleDeleteItem={handleDeleteItem} />
+      <Stats items={items} />
     </div>
   );
 }
-
+ 
 export default App;

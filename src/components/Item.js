@@ -1,18 +1,20 @@
 import React from 'react';
  
-function Item({ item, handleDeleteItem, handleUpdateItem }) {
+function Item({ item, onDelete, onUpdate }) {
+  const itemDone = item.packed ? { textDecoration: 'line-through' } : {};
+ 
   return (
-    <li>
+    <li style={itemDone}>
       <input
-        onChange={() => handleUpdateItem(item.id)}
         type="checkbox"
         checked={item.packed}
+        onChange={() => onUpdate(item.id)} // Trigger the update function on change
+        style={{ marginRight: "10px" }}
       />
-      <span style={item.packed ? {textDecoration: "line-through"} : {}}>{item.quantity} {item.description}</span>
-      <button onClick={() => handleDeleteItem(item.id)}>❌</button>
+      {item.description} ({item.quantity})
+      <button onClick={() => onDelete(item.id)}>❌</button>
     </li>
   );
 }
  
 export default Item;
- 
